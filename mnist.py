@@ -48,3 +48,14 @@ def load(imagefile_path: str, labelfile_path: str) -> list:
         image_data.append((image, label))
 
       return image_data
+
+def image_string(image_bytes: np.ndarray) -> str:
+  final_string = ""
+  for y in range(image_bytes.shape[0]):
+    for x in range(image_bytes.shape[1]):
+      value = " "
+      if image_bytes[y, x] > 127:
+        value = "0"
+      final_string += value + " "
+    final_string += "\n"
+  return final_string
