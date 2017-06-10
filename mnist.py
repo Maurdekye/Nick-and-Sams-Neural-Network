@@ -8,11 +8,12 @@ class MNISTFormatException(Exception):
 def bytes_to_int(bytestring: bytes) -> int:
   return int.from_bytes(bytestring, byteorder="big")
 
-def load(imagefile_path: str, labelfile_path: str) -> list:
+def load(imagefile_path: str, labelfile_path: str, data_limit=None) -> list:
   """
   Loads MNIST data into a list containing tuples with two items each
-  The first item is a 2d numpy ndarray of bytes containing the image data of a digit
-  the second item is a single byte which is the number the image data ought to represent
+  The first argument is a 2d numpy ndarray of bytes containing the image data of a digit
+  the second argument is a single byte which is the number the image data ought to represent
+  the third argument is an optional limit to only load a few items
   """
   with open(imagefile_path, "rb") as image_file:
     with open(labelfile_path, "rb") as label_file:
@@ -35,6 +36,9 @@ def load(imagefile_path: str, labelfile_path: str) -> list:
 
       image_data = []
 
+      if data_limit != None:
+        num_items = data_limit
+
       for i in range(num_items):
         image = np.empty((image_height, image_width), dtype=np.uint8)
         label = np.uint8(bytes_to_int(label_file.read(1)))
@@ -45,12 +49,12 @@ def load(imagefile_path: str, labelfile_path: str) -> list:
 
       return image_data
 
-def image_string(image_bytes: np.ndarray) -> str:
+def image_string(image_bytes: np.ndarray, display_threshold=127) -> str:
   final_string = ""
   for y in range(image_bytes.shape[0]):
     for x in range(image_bytes.shape[1]):
       value = " "
-      if image_bytes[y, x] > 127:
+      if image_bytes[y, x] > display_threshold:
         value = "0"
       final_string += value + " "
     final_string += "\n"
