@@ -3,13 +3,13 @@ import numpy as np
 import checkversion
 
 class GradientDescent:
-def get_mini_batches(X, y, batch_size):
-    random_idxs = random.choice(len(y), len(y), replace=False)
-    X_shuffled = X[random_idxs,:]
-    y_shuffled = y[random_idxs]
-    mini_batches = [(X_shuffled[i:i+batch_size,:], y_shuffled[i:i+batch_size]) for
-                   i in range(0, len(y), batch_size)]
-    return mini_batches
+    def get_mini_batches(X, y, batch_size):
+        random_idxs = random.choice(len(y), len(y), replace=False)
+        X_shuffled = X[random_idxs,:]
+        y_shuffled = y[random_idxs]
+        mini_batches = [(X_shuffled[i:i+batch_size,:], y_shuffled[i:i+batch_size]) for
+                       i in range(0, len(y), batch_size)]
+        return mini_batches
 
     def train_nn_MBGD(nn_structure, X, y, bs=100, iter_num=3000, alpha=0.25, lamb=0.000):
     W, b = setup_and_init_weights(nn_structure)

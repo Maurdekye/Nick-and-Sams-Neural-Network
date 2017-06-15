@@ -42,6 +42,17 @@ class NeuralNetwork:
 
     return output_layer_values
 
+  def Cost(self, input_data: list, target_output_data: list):
+    """
+    Evaluates the cost of the current network from a given set of input and expected output data
+    """
+    error = 0
+    for input_, target_output in zip(input_data, target_output_data):
+      generated_output = self.Evaluate(input_)
+      for target_output_value, generated_output_value in zip(target_output, generated_output):
+        error += (target_output_value - generated_output_value) ** 2
+    return error / (2 * len(input_data))
+
 def format_for_network(image: np.ndarray, label: np.uint8) -> tuple:
   """
   Takes raw mnist image data and converts it to a format that
