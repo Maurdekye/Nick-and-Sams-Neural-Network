@@ -59,3 +59,7 @@ def image_string(image_bytes: np.ndarray, display_threshold=127) -> str:
       final_string += value + " "
     final_string += "\n"
   return final_string
+
+def generate_batch(dataset: list, batch_size: int) -> list:
+  items = random.sample(range(len(dataset)), batch_size)
+  return [dataset[i] for i in items]
