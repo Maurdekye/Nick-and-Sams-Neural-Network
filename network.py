@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import checkversion
+import random
 import numpy as np
 import math
 
@@ -16,6 +17,13 @@ class NeuralNetwork:
     # Layer Weight Data
     self.input_to_hidden_weights = np.random.rand(self.input_layer_size, self.hidden_layer_size)
     self.hidden_to_output_weights = np.random.rand(self.hidden_layer_size, self.output_layer_size)
+
+    # Gradient Vectors
+    self.hidden_biases_gradient = np.zeros_like(self.hidden_layer_biases)
+    self.output_biases_gradient = np.zeros_like(self.output_layer_biases)
+
+    self.input_to_hidden_weights_gradient = np.zeros_like(self.input_to_hidden_weights)
+    self.hidden_to_output_weights_gradient = np.zeros_like(self.hidden_to_output_weights)
 
   def Evaluate(self, input_data: np.ndarray) -> np.ndarray:
     """
@@ -53,6 +61,21 @@ class NeuralNetwork:
         error += (target_output_value - generated_output_value) ** 2
     return error / (2 * len(input_data))
 
+  def ComputeGradients(self):
+    """
+    Naively computes the gradient vectors for the current weights and biases using the simple numerical
+    definition of the derivative, lim h>0 (f(x + h) - f(x)) / h
+    """
+    h = 1e-8
+    hidden_biases_gradient = np.zeros(self.hidden_layer_biases)
+
+  def Train(self, input_data: list, target_output_data: list, learning_rate: int) -> int:
+    """
+    Computes a gradient vector and steps in the negative gradient of the cost function.
+    """
+
+
+
 def format_for_network(image: np.ndarray, label: np.uint8) -> tuple:
   """
   Takes raw mnist image data and converts it to a format that
@@ -71,6 +94,10 @@ def format_for_network(image: np.ndarray, label: np.uint8) -> tuple:
   output_data[label] = 1.0
 
   return input_data, output_data
+
+def generate_batch(dataset: list, batch_size: int) -> np.ndarray:
+  items = random.sample(range(len(dataset)), batch_size)
+  return [dataset[i] for i in items]
 
 def sigmoid(value: float) -> float:
   if value > 10:
